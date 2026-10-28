@@ -404,18 +404,27 @@ gateUpdate();const gateTimer=setInterval(()=>{gateUpdate();if(gateOpen)clearInte
 
 </script>
 <script>
-/* เปิดจากเบราว์เซอร์ในแอป (IG/LINE/FB/TikTok ฯลฯ) -> พยายามเด้งออกไปเบราว์เซอร์ภายนอกอัตโนมัติ */
+/* เปิดจากเบราว์เซอร์ในแอป (IG/LINE/FB/TikTok ฯลฯ): LINE/Android เด้งออกเอง, iPhone มีปุ่ม "เปิดใน Safari" ให้กด */
 (function(){try{
 var ua=navigator.userAgent||'',q=location.search;
-var inapp=/Instagram|FBAN|FBAV|FB_IAB|FBIOS|\bLine\/|TikTok|musical_ly|Bytedance|MicroMessenger|Twitter|Snapchat|; wv\)/i.test(ua),isLine=/\bLine\//i.test(ua);
+var inapp=/Instagram|FBAN|FBAV|FB_IAB|FBIOS|\bLine\/|TikTok|musical_ly|Bytedance|MicroMessenger|Twitter|Snapchat|; wv\)/i.test(ua),isLine=/\bLine\//i.test(ua),and=/Android/i.test(ua),ios=/iPhone|iPad|iPod/i.test(ua);
 var clean=function(u){return u.replace(/([?&])(openExternalBrowser|_ob)=1&?/g,'$1').replace(/[?&]$/,'')};
 if(!inapp){if(/[?&](openExternalBrowser|_ob)=1/.test(q))history.replaceState(null,'',clean(location.href));return}
 var base=clean(location.href.split('#')[0]),sep=base.indexOf('?')<0?'?':'&';
 if(isLine){if(!/openExternalBrowser=1/.test(q))location.replace(base+sep+'openExternalBrowser=1');return}
-if(/[?&]_ob=1/.test(q))return;
-try{if(sessionStorage.getItem('ob'))return;sessionStorage.setItem('ob','1')}catch(e){}
-if(/Android/i.test(ua))location.href='intent://'+location.host+location.pathname+clean(q)+'#Intent;scheme=https;S.browser_fallback_url='+encodeURIComponent(base+sep+'_ob=1')+';end';
-else if(/iPhone|iPad|iPod/i.test(ua))location.href='x-safari-'+base;
+var failed=/[?&]_ob=1/.test(q),intent='intent://'+location.host+location.pathname+clean(q)+'#Intent;scheme=https;S.browser_fallback_url='+encodeURIComponent(base+sep+'_ob=1')+';end';
+if(and&&!failed){try{if(sessionStorage.getItem('ob'))return;sessionStorage.setItem('ob','1')}catch(e){}location.href=intent;return}
+/* iPhone (และ Android ที่เด้งเองไม่สำเร็จ): ปุ่มให้กดเอง */
+var w=document.createElement('div');
+w.style.cssText='position:fixed;left:50%;transform:translateX(-50%);top:max(10px,env(safe-area-inset-top));z-index:100000;display:flex;align-items:center;gap:6px;max-width:94vw;font-family:inherit';
+var b=document.createElement('button');
+b.textContent=ios?'🌐 เปิดใน Safari':'🌐 เปิดในเบราว์เซอร์';
+b.style.cssText='border:0;border-radius:99px;padding:10px 16px;font:inherit;font-size:15px;font-weight:700;background:#5271ff;color:#fff;box-shadow:0 4px 0 #3550d6,0 8px 18px rgba(0,0,0,.25);cursor:pointer;line-height:1.35';
+var x=document.createElement('button');x.textContent='✕';x.setAttribute('aria-label','ปิด');
+x.style.cssText='border:0;border-radius:50%;width:30px;height:30px;font:inherit;background:#fff;color:#3a3000;box-shadow:0 2px 8px rgba(0,0,0,.25);cursor:pointer';
+x.onclick=function(){w.remove()};
+b.onclick=function(){location.href=ios?'x-safari-'+base:intent};
+w.appendChild(b);w.appendChild(x);document.body.appendChild(w);
 }catch(e){}})();
 </script>
 </body>
