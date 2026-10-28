@@ -420,7 +420,7 @@ var st='display:flex;align-items:center;gap:12px;text-align:left;background:#fff
 var nb='flex:none;width:34px;height:34px;border-radius:50%;background:#5271ff;color:#fff;font-weight:700;display:grid;place-items:center';
 o.innerHTML='<div style="max-width:380px;width:100%"><div style="font-size:54px">🧁</div><h1 style="margin:6px 0 4px;font-size:24px;color:#5271ff">เปิดจากเบราว์เซอร์ก่อนนะ</h1><p style="margin:0 0 6px;font-size:16px">ตอนนี้เปิดอยู่ในแอป จึงยังสั่งไม่ได้<br>ทำตาม 2 ขั้นตอนนี้ได้เลย</p>'
 +'<div style="'+st+'"><span style="'+nb+'">1</span><span>กดปุ่ม <b style="font-size:24px;letter-spacing:2px">⋯</b> (จุด 3 จุด) ที่มุมจอ</span></div>'
-+'<div style="'+st+'"><span style="'+nb+'">2</span><span>กด <b>'+(ios?'“เปิดใน Safari”':'“เปิดในเบราว์เซอร์”')+'</b></span></div></div>';
++'<div style="'+st+'"><span style="'+nb+'">2</span><span>กด <b>'+'“เปิดจากเบราว์เซอร์ภายนอก”'+'</b></span></div></div>';
 document.body.appendChild(o);document.documentElement.style.overflow='hidden';document.body.style.overflow='hidden';
 }catch(e){}})();
 </script>
