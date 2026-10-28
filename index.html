@@ -403,5 +403,24 @@ if(!profileOk())go('me');else renderMeHint();
 gateUpdate();const gateTimer=setInterval(()=>{gateUpdate();if(gateOpen)clearInterval(gateTimer)},250);
 
 </script>
+<script>
+/* เตือนเมื่อเปิดจากเบราว์เซอร์ในแอป (IG/LINE/FB/TikTok ฯลฯ) */
+(function(){try{
+var ua=navigator.userAgent||'',m=[[/Instagram/i,'Instagram'],[/FBAN|FBAV|FB_IAB|FBIOS/i,'Facebook'],[/\bLine\//i,'LINE'],[/TikTok|musical_ly|Bytedance/i,'TikTok'],[/MicroMessenger/i,'WeChat'],[/Twitter/i,'X'],[/Snapchat/i,'Snapchat'],[/; wv\)/i,'แอป']],app='';
+for(var i=0;i<m.length;i++)if(m[i][0].test(ua)){app=m[i][1];break}
+if(!app)return;
+if(app=='LINE'&&!/[?&]openExternalBrowser=1/.test(location.search)){location.replace(location.href.split('#')[0]+(location.search?'&':'?')+'openExternalBrowser=1');return}
+var and=/Android/i.test(ua),ios=/iPhone|iPad|iPod/i.test(ua),url=location.href.replace(/[?&]openExternalBrowser=1/,'');
+var d=document.createElement('div');
+d.style.cssText='position:fixed;left:0;right:0;top:0;z-index:100000;padding:max(12px,env(safe-area-inset-top)) 14px 12px;background:#fff3c4;border-bottom:3px solid #5271ff;color:#3a3000;font:14px/1.5 inherit;font-family:inherit;box-shadow:0 6px 18px rgba(0,0,0,.18)';
+d.innerHTML='<b>⚠️ ตอนนี้เปิดจากแอป '+app+' อยู่</b><br>บางอย่างอาจใช้ไม่ได้ (เช่น แชร์ตำแหน่ง แนบสลิป จำข้อมูล) กรุณาเปิดจากเบราว์เซอร์ '+(ios?'Safari':and?'Chrome':'Chrome / Safari')+'<br><small>'+(ios?'กดปุ่ม ⋯ หรือไอคอนแชร์ แล้วเลือก "เปิดใน Safari"':'กดปุ่ม ⋮ มุมขวาบน แล้วเลือก "เปิดในเบราว์เซอร์"')+' หรือกดคัดลอกลิงก์แล้วนำไปวางในเบราว์เซอร์</small><div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"></div>';
+var r=d.lastChild;
+function b(t,f,p){var x=document.createElement('button');x.textContent=t;x.style.cssText='border:0;border-radius:99px;padding:8px 14px;font:inherit;font-weight:700;cursor:pointer;'+(p?'background:#5271ff;color:#fff':'background:#fff;color:#3a3000;border:2px solid #e3d9a8');x.onclick=f;r.appendChild(x);return x}
+var cp=b('📋 คัดลอกลิงก์',function(){var ok=function(){cp.textContent='✅ คัดลอกแล้ว'};try{navigator.clipboard.writeText(url).then(ok,function(){prompt('คัดลอกลิงก์นี้',url)})}catch(e){prompt('คัดลอกลิงก์นี้',url)}},1);
+if(and)b('เปิดใน Chrome',function(){location.href='intent://'+location.host+location.pathname+location.search.replace(/[?&]openExternalBrowser=1/,'')+'#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url='+encodeURIComponent(url)+';end'});
+b('ปิด',function(){d.remove()});
+document.body.appendChild(d);
+}catch(e){}})();
+</script>
 </body>
 </html>
